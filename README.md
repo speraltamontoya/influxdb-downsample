@@ -32,3 +32,26 @@ python influxdb-downsample.py --user *** --password *** --database telegraf
 python influxdb-downsample.py --user *** --password *** --database telegraf --retentionPolicy 40minutes --groupTime 20m --duration '40d'
 ```
 
+
+# "known bugs"
+
+
+-The problem occurs when the node reaches ram memory limit.
+It usually causes a core in influxdb causing it to restart the database automatically.
+```
+requests.exceptions.ChunkedEncodingError: ('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))
+```
+
+I have solved this, generating a temporary swap file
+```
+fallocate -l 15G /secondswap
+chmod 600 /secondswap
+mkswap /secondswap
+spwaon /secondswap
+```
+
+-The problem occurs when the duration of rt Source is longer than the new retention policy
+```
+influxdb.exceptions.InfluxDBClientError: partial write: points beyond retention policy dropped=1584
+```
+
