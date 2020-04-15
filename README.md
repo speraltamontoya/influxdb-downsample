@@ -18,10 +18,9 @@ This script uses the InfluxDB-Python library. https://github.com/influxdata/infl
 ```
 
 # Usage examples
-
+```
 python influxdb-downsample.py --user *** --password *** --database telegraf
 
 python influxdb-downsample.py --user *** --password *** --database telegraf --retentionPolicy 40minutes --groupTime 20m --duration '40d'
-
-
+```
 
