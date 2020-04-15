@@ -34,7 +34,7 @@ def countFields(fields):
 		nfield += 1
 	return nfield
 
-def main(host='localhost', port=8086, database='', user='', password='',retentionPolicy='history', groupTime='1h', duration='INF'):
+def main(host='localhost', port=8086, database='', user='', password='', rtSource='autogen', retentionPolicy='history', groupTime='1h', duration='INF'):
 	""" Instantiate a connection to the InfluxDB. """
 	client = InfluxDBClient(host, port, user, password, database,timeout=None)
 	
@@ -59,7 +59,7 @@ def main(host='localhost', port=8086, database='', user='', password='',retentio
 						line = line + "max(\"" + field["fieldKey"] + "\") as \"" + field["fieldKey"] + "_max\","
 
 			CQNAME = database + "_" + retentionPolicy + "_" + measurement
-			FROM = database + ".autogen." + measurement
+			FROM = database + "." + rtSource + "." + measurement
 			INTO = database + "." + retentionPolicy + "." + measurement
 			
 			Query = "SELECT " + line[:-1] + " INTO " + INTO + " FROM " + FROM + " WHERE time < now()-" + groupTime + " GROUP BY time(" + groupTime + "),*"
@@ -72,9 +72,10 @@ def parse_args():
 	parser = argparse.ArgumentParser(description='example code to play with InfluxDB')
 	parser.add_argument('--host', type=str, required=False, default='localhost', help='hostname of InfluxDB http API')
 	parser.add_argument('--port', type=int, required=False, default=8086, help='port of InfluxDB http API')
-	parser.add_argument('--database', type=str, required=True, default='telegraf', help='database of InfluxDB http API')
+	parser.add_argument('--database', type=str, required=False, default='telegraf', help='database of InfluxDB http API')
 	parser.add_argument('--user', type=str, required=False, default='', help='user of InfluxDB http API')
 	parser.add_argument('--password', type=str, required=False, default='', help='password of InfluxDB http API')
+	parser.add_argument('--rtSource', type=str, required=False, default='autogen', help='default: history')
 	parser.add_argument('--retentionPolicy', type=str, required=False, default='history', help='default: history')
 	parser.add_argument('--groupTime', type=str, required=False, default='1h', help='default: 1h | examples: 15m, 30m, 1h...')
 	parser.add_argument('--duration', type=str, required=False, default='INF', help='default: INF | duration - the duration of the new retention policy.')
@@ -82,6 +83,4 @@ def parse_args():
 
 if __name__ == '__main__':
 	args = parse_args()
-	main(host=args.host, port=args.port, database=args.database, user=args.user, password=args.password, retentionPolicy=args.retentionPolicy, groupTime=args.groupTime, duration=args.duration)
-
-
+	main(host=args.host, port=args.port, database=args.database, user=args.user, password=args.password, rtSource=args.rtSource, retentionPolicy=args.retentionPolicy, groupTime=args.groupTime, duration=args.duration)
