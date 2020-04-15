@@ -1,5 +1,6 @@
 # influxdb-downsample
 It is a python script for the automatic creation of retention policies and continuous queries.
+
 During script execution an initial load of existing data is done from '--rtSource'
 If a second script execution is performed with the same parameters, only will be create and charge data of new measurements not existing.
 
