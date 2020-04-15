@@ -1,2 +1,2 @@
 # influxdb-downsample
-Se trata de un script en python para la creación automatica de politicas de retencion y consultas continuas. 
+It is a python script for the automatic creation of retention policies and continuous queries.. 
