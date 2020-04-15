@@ -15,7 +15,6 @@ This script uses the InfluxDB-Python library. https://github.com/influxdata/infl
 --duration         |expiration time of the retention policy. default: "INF"
 
  
-
 # Usage examples
 
 python influxdb-downsample.py --user *** --password *** --database telegraf
